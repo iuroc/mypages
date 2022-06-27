@@ -22,24 +22,28 @@ class Poncon
     }
 
     /**
-     * 获取POST参数，语法：POST($key[, $default]);
+     * 获取POST参数，语法：POST($key[, $default[, $slashes]])]]);
      * @param string $key 参数名
      * @param mixed $default 默认值
+     * @param bool $slashes 是否转义
      * @return mixed
      */
     function POST($key, ...$args)
     {
-        return isset($_POST[$key]) && $_POST[$key] ? $_POST[$key] : (isset($args[0]) ? $args[0] : null);
+        $temp = isset($_POST[$key]) && $_POST[$key] ? $_POST[$key] : (isset($args[0]) ? $args[0] : null);
+        return isset($args[1]) && $args[1] ? addslashes($temp) : $temp;
     }
     /**
-     * 获取GET参数，语法：GET($key[, $default]);
+     * 获取GET参数，语法：GET($key[, $default[, $slashes]]);
      * @param string $key 参数名
      * @param mixed $default 默认值
+     * @param bool $slashes 是否转义
      * @return mixed
      */
     function GET($key, ...$args)
     {
-        return isset($_GET[$key]) && $_GET[$key] ? $_GET[$key] : (isset($args[0]) ? $args[0] : null);
+        $temp = isset($_GET[$key]) && $_GET[$key] ? $_GET[$key] : (isset($args[0]) ? $args[0] : null);
+        return isset($args[1]) && $args[1] ? addslashes($temp) : $temp;
     }
 
     /**
@@ -139,8 +143,10 @@ class Poncon
                 'msg' => '数据库错误'
             ]));
         }
+
         // 新建用户表
-        $sql = "CREATE TABLE IF NOT EXISTS `mypages_user` (
+        $table = $config['table']['user'];
+        $sql = "CREATE TABLE IF NOT EXISTS `$table` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `username` varchar(255) NOT NULL, -- 用户名
             `password` varchar(255) NOT NULL, -- 密码 md5密文
@@ -152,11 +158,12 @@ class Poncon
             $this->error(903, '数据库错误');
         }
         // 新建收藏表
-        $sql = "CREATE TABLE IF NOT EXISTS `mypages_collect` (
+        $table = $config['table']['collect'];
+        $sql = "CREATE TABLE IF NOT EXISTS `$table` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
-            `username` int(11) NOT NULL, -- 收藏者用户名
-            `title` varchar(255) NOT NULL, -- 网页标题
-            `url` varchar(255) NOT NULL, -- 网址
+            `username` varchar(255) NOT NULL, -- 收藏者用户名
+            `title` TEXT NOT NULL, -- 网页标题
+            `url` TEXT NOT NULL, -- 网址
             `update_time` int(11) NOT NULL, -- 更新时间
             `tag_list` TEXT NOT NULL, -- 标签列表，以逗号分隔
             `private` int(11) NOT NULL, -- 0:公开 1:私密
@@ -167,5 +174,28 @@ class Poncon
             $this->error(903, '数据库错误');
         }
         return $conn;
+    }
+
+    /**
+     * 登录验证，语法：login($conn, $username, $password);
+     * @param object $conn 数据库连接
+     * @param string $username 用户名
+     * @param string $password 密码
+     * @return array|null
+     */
+    function login($conn, $username, $password)
+    {
+        $config = $this->getConfig();
+        $table = $config['table']['user'];
+        $sql = "SELECT * FROM `$table` WHERE `username` = '$username' AND `password` = '$password'";
+        $result = mysqli_query($conn, $sql);
+        if (!$result) {
+            $this->error(903, '数据库错误');
+        }
+        $row = mysqli_fetch_assoc($result);
+        if (!$row) {
+            $this->error(907, '用户名或密码错误');
+        }
+        return $row;
     }
 }
