@@ -9,7 +9,7 @@ use Poncon\Poncon;
 
 $poncon = new Poncon();
 
-$url = $poncon->GET('url', null, true);
+$url = $poncon->POST('url', null, true);
 if (!$url) {
     $poncon->error(900, '参数缺失');
 }

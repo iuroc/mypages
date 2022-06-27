@@ -12,12 +12,12 @@ $poncon = new Poncon();
 // 初始化数据库
 $conn = $poncon->initDb();
 
-$username = $poncon->GET('username', null, true);
-$password = $poncon->GET('password', null, true);
-$tags = $poncon->GET('tags', null, true); // JSON数组[...]
-$title = $poncon->GET('title', null, true);
-$url = $poncon->GET('url', null, true);
-$private = $poncon->GET('private', 0, true); // 0:公开 1:私密
+$username = $poncon->POST('username', null, true);
+$password = $poncon->POST('password', null, true);
+$tags = $poncon->POST('tags', null, true); // JSON数组[...]
+$title = $poncon->POST('title', null, true);
+$url = $poncon->POST('url', null, true);
+$private = $poncon->POST('private', 0, true); // 0:公开 1:私密
 $update_time = time();
 
 if (!$username || !$password || !$title || !$url) {

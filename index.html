@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主页 - My Pages</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/bootstrap/4.6.0/css/bootstrap.min.css" />
+    <style>
+        .page-oyp {
+            display: none;
+        }
+    </style>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.staticfile.org/blueimp-md5/2.19.0/js/md5.min.js"></script>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/poncon.js"></script>
+    <script src="js/index.js"></script>
+</head>
+
+<body class="fade">
+    <div class="container my-4 my-sm-5">
+        <div class="head d-flex align-items-center mb-4">
+            <img src="img/chevron-left-solid.svg" alt="返回上一页" draggable="false"
+                class="btn-back-oyp cursor-pointer mr-3 mt-1" style="height: 30px; display: none;"
+                onclick="history.back()">
+            <h2 class="webTitle mb-0"></h2>
+        </div>
+        <div class="page-home page-oyp">
+            <!-- 一堆按钮 -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="input-group mb-4">
+                        <input type="text" class="border-dark form-control input-username" placeholder="请输入关键词">
+                        <div class="input-group-append">
+                            <button class="btn btn-dark">搜索</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <button class="btn btn-block btn-primary">增加收藏</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-block btn-success">标签列表</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 收藏列表 -->
+            <div class="row">
+
+            </div>
+        </div>
+        <div class="page-login page-oyp">
+            <div class="row">
+                <div class="col-xl-10 mx-auto">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row h-100 align-items-center">
+                                <!-- 登录组件 -->
+                                <div class="col-lg-10 mx-auto sub-page-login page-oyp">
+                                    <h2 class="text-center mb-4">用户登录</h2>
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">账号</span>
+                                        </div>
+                                        <input type="text" class="form-control input-username" placeholder="请输入用户名">
+                                    </div>
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">密码</span>
+                                        </div>
+                                        <input type="password" class="form-control input-password" placeholder="请输入密码"
+                                            autocomplete="new-password">
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col">
+                                            <button class="btn btn-block btn-primary"
+                                                onclick="Poncon.clickLogin()">登陆</button>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-block btn-outline-secondary"
+                                                onclick="history.back();">返回</button>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <a href="#/login/register">没有账号？点此注册</a>
+                                    </div>
+                                </div>
+                                <!-- 注册组件 -->
+                                <div class="col-lg-10 mx-auto sub-page-register page-oyp">
+                                    <h2 class="text-center mb-4">注册账号</h2>
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">账号</span>
+                                        </div>
+                                        <input type="text" class="form-control input-username" placeholder="请输入用户名">
+                                    </div>
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">密码</span>
+                                        </div>
+                                        <input type="password" class="form-control input-password" placeholder="请输入密码"
+                                            autocomplete="new-password">
+                                    </div>
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">重复</span>
+                                        </div>
+                                        <input type="password" class="form-control input-password2"
+                                            placeholder="请重复输入密码" autocomplete="new-password">
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col">
+                                            <button class="btn btn-block btn-primary"
+                                                onclick="Poncon.clickRegister()">注册</button>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-block btn-outline-secondary"
+                                                onclick="history.back();">返回</button>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <a href="#/login">已有账号？点此登录</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 d-none d-md-block">
+                            <img style="width: 100%;" src="img/insect-6626635_1920.jpg" draggable="false">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -13,8 +13,8 @@ $poncon = new Poncon();
 // 初始化数据库
 $conn = $poncon->initDb();
 
-$username = $poncon->GET('username', null, true);
-$password = $poncon->GET('password', null, true);
+$username = $poncon->POST('username', null, true);
+$password = $poncon->POST('password', null, true);
 
 if (!$username || !$password) {
     $poncon->error(900, '参数缺失');
