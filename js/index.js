@@ -17,7 +17,7 @@ $(document).ready(function () {
     function router(hash) {
 
         if (!Poncon.loginStatus) {
-            Poncon.login(Poncon.getStorage('username'), Poncon.getStorage('password'))
+            Poncon.login(Poncon.getStorage('username'), Poncon.getStorage('password'), true)
         }
 
         scrollTo(0, 0)
@@ -36,6 +36,11 @@ $(document).ready(function () {
         if (target == 'home') {
             document.title = '主页 - ' + Poncon.title
             $('.webTitle').html(Poncon.title)
+            if (!Poncon.pageLoad.home) {
+                Poncon.pageLoad.home = true
+                Poncon.setting.isBottom = 0
+                Poncon.loadCollectList(0)
+            }
         } else if (target == 'login') {
             $('.webTitle').html('')
             if (hash[2] == 'register') {
@@ -58,11 +63,31 @@ $(document).ready(function () {
         } else {
             $('.btn-back-oyp').css({ 'display': 'block' })
         }
+
+        if (target == 'home') {
+            $('.userCenter').css('display', 'inline-block')
+        } else {
+            $('.userCenter').css('display', 'none')
+        }
+
     }
 
     window.addEventListener('hashchange', function (event) {
         // 监听Hash改变 通过location.hash='xxx'可触发
         var hash = new URL(event.newURL).hash
         router(hash)
+    })
+
+
+
+
+    $(window).scroll(function () {
+        var scrollTop = $(this).scrollTop()
+        var scrollHeight = $(document).height()
+        var windowHeight = $(this).height()
+        if (scrollTop + windowHeight + 50 > scrollHeight && !Poncon.setting.isBottom) {
+            Poncon.setting.isBottom = 1
+            Poncon.loadCollectList(Poncon.data.nowPage + 1)
+        }
     })
 })

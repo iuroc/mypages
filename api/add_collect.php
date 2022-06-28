@@ -30,6 +30,14 @@ $poncon->login($conn, $username, $password);
 $config = $poncon->getConfig();
 $table = $config['table']['collect'];
 
+// 判断URL是否存在
+
+$sql = "SELECT `url` FROM `$table` WHERE `url` = '$url' LIMIT 1;";
+$result = mysqli_query($conn, $sql);
+if (mysqli_num_rows($result) > 0) {
+    $poncon->error(904, '记录已经存在');
+}
+
 // 增加收藏
 $sql = "INSERT INTO `$table` (`username`, `tag_list`, `update_time`, `title`, `url`, `private`) VALUES ('$username', '$tags', $update_time, '$title', '$url', $private);";
 

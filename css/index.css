@@ -1,3 +1,21 @@
 .oyp-rounded-lg {
     border-radius: 1rem;
 }
+
+* {
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+}
+
+.oyp-limit-line {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.collectList .rightTop {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

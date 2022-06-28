@@ -19,29 +19,33 @@
     <script src="js/index.js"></script>
 </head>
 
-<body class="fade">
+<body class="fade user-select-none">
     <div class="container my-4 my-sm-5">
         <div class="head d-flex align-items-center mb-4">
             <img src="img/chevron-left-solid.svg" alt="返回上一页" draggable="false"
                 class="btn-back-oyp cursor-pointer mr-3 mt-1" style="height: 30px; display: none;"
                 onclick="history.back()">
-            <h2 class="webTitle mb-0"></h2>
+            <h2 class="webTitle mb-0 mr-auto"></h2>
+            <div class="float-right userCenter">
+                <button class="btn btn-danger">个人中心</button>
+            </div>
         </div>
         <div class="page-home page-oyp">
             <!-- 一堆按钮 -->
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="input-group mb-4">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="input-group">
                         <input type="text" class="border-dark form-control input-username" placeholder="请输入关键词">
                         <div class="input-group-append">
                             <button class="btn btn-dark">搜索</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mb-4">
                     <div class="row">
                         <div class="col-6">
-                            <button class="btn btn-block btn-primary">增加收藏</button>
+                            <button class="btn btn-block btn-primary"
+                                onclick="Poncon.showModal('addCollect')">添加收藏</button>
                         </div>
                         <div class="col-6">
                             <button class="btn btn-block btn-success">标签列表</button>
@@ -50,7 +54,7 @@
                 </div>
             </div>
             <!-- 收藏列表 -->
-            <div class="row">
+            <div class="row collectList">
 
             </div>
         </div>
@@ -137,7 +141,68 @@
             </div>
         </div>
     </div>
+    <!-- 模态框 - 新增收藏 -->
+    <div class="modal modal-addCollect" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">添加收藏</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-1 pb-0">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend d-none d-sm-block">
+                            <span class="input-group-text">网页URL</span>
+                        </div>
+                        <input type="text" class="form-control input-url" placeholder="请输入网页URL"
+                            onkeyup="Poncon.inputKeyup(event, 'getHostFromUrl')">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" onclick="Poncon.getHostFromUrl()">取HOST</button>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend d-none d-sm-block">
+                            <span class="input-group-text">网页标题</span>
+                        </div>
+                        <input type="text" class="form-control input-title" placeholder="请输入网页标题"
+                            onkeyup="Poncon.inputKeyup(event, 'getWebTitle')">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary getWebTitle" onclick="Poncon.getWebTitle()">获取</button>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-8 mb-3 pr-md-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control input-tagName" placeholder="标签名"
+                                    onkeyup="Poncon.inputKeyup(event, 'addTag')">
+                                <div class="input-group-append">
+                                    <button class="btn btn-danger" onclick="Poncon.addTag()">加标签</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <button class="btn btn-primary btn-block" onclick="Poncon.addCollect()">添加收藏</button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <span>提示：点击标签可以移除</span>
+                        <div class="float-right">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch_private">
+                                <label class="custom-control-label" for="customSwitch_private">设置私密</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tagList">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -14,7 +14,8 @@ if (!$url) {
     $poncon->error(900, '参数缺失');
 }
 
-$ym = $poncon->request($url, 'GET', null, "referer: $url\norigin: $url");
+$ym = file_get_contents($url);
+
 $title = $poncon->sj($ym, '<title>', '</title>');
 // 去除实体
 $title = html_entity_decode($title);
