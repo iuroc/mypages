@@ -4,13 +4,13 @@ const Poncon = {
     storageKey: 'my_pages', // 本地存储键名
     entryPage: '#/home', // 主页，路由出错时加载
     loginStatus: 0, // 登录状态 0:未登录 1: 已登录
-    tagList: [],
-    pageLoad: {},
-    setting: {
-        newWindowOpen: true
+    tagList: [], // 标签列表
+    pageLoad: {}, // 页面加载状态
+    setting: { // 网页设置
+        newWindowOpen: true, // 新窗口打开
     },
-    data: {
-
+    data: { // 网页数据
+        listType: 'load', // 列表类型 load 正常加载 search 搜索
     },
     /**
      * 用户登陆
@@ -163,6 +163,14 @@ const Poncon = {
             // 新增收藏
             $('.modal-addCollect').modal('show')
             $('.modal-addCollect .input-url').focus()
+        } else if (modalName == 'searchCollect') {
+            // 搜索收藏
+            $('.modal-searchCollect').modal('show')
+            var input = $('.modal-searchCollect .input-keyword')
+            input.focus()
+            if (!input.val()) {
+                this.clickSearch()
+            }
         }
     },
     /**
@@ -385,6 +393,7 @@ const Poncon = {
                     _page.find('.collectList').append(html)
                     Poncon.data.nowPage = page
                     Poncon.setting.isBottom = 0
+                    Poncon.data.listType = 'load'
                     return
                 }
                 Poncon.setting.isBottom = 1
@@ -396,14 +405,15 @@ const Poncon = {
      * 将数据列表转为HTML代码
      * @param {array} dataList 数据列表
      */
-    makeList(dataList) {
+    makeList(dataList, mode) {
         var html = ''
+        mode = mode == 'search' ? 'mb-4' : 'col-xl-4 col-lg-6 mb-4'
         dataList.forEach((item) => {
             var tagsHtml = ''
             item.tag_list.forEach((tag) => {
                 tagsHtml += `<div class="border border-dark rounded px-2 d-inline-block mr-1 mb-2"># ${tag}</div>`
             })
-            html += `<div class="col-xl-4 col-lg-6 mb-4">
+            html += `<div class="${mode}">
                         <div class="card shadow-sm h-100 border-secondary bg-light">
                             <div class="card-body">
                                 <h5 class="title mb-2 oyp-limit-line" title="${item.title}" onclick="Poncon.goHref('${item.url}');">${item.title}</h5>
@@ -446,6 +456,56 @@ const Poncon = {
         }
         date = new Date(date)
         return two(date.getFullYear()) + '-' + two(date.getMonth() + 1) + '-' + two(date.getDate()) + ' ' + two(date.getHours()) + ':' + two(date.getMinutes())
-    }
+    },
+    /**
+     * 单击搜索事件
+     */
+    clickSearch() {
+        var modal = $('.modal-searchCollect')
+        var keyword = modal.find('.input-keyword').val()
+        this.searchCollect(keyword, 0)
+    },
+    /**
+     * 搜索收藏列表
+     * @param {string} keyword 搜索关键词
+     * @param {number} page 页码 从0开始
+     */
+    searchCollect(keyword, page) {
+        var target = this
+        var modal = $('.modal-searchCollect')
 
+        if (page == 0) {
+            modal.find('.searchList').html('')
+        }
+        $.ajax({
+            method: 'post',
+            url: this.baseUrl + 'api/search.php',
+            data: {
+                username: this.getStorage('username'),
+                password: this.getStorage('password'),
+                keyword: keyword,
+                page: page,
+                pageSize: 15
+            },
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    if (data.data.length == 0) {
+                        target.setting.isBottom_search = 1
+                        return
+                    }
+                    var html = target.makeList(data.data, 'search')
+                    modal.find('.searchList').append(html)
+                    Poncon.data.nowPage_search = page
+                    Poncon.data.keyword = keyword
+                    Poncon.setting.isBottom_search = 0
+                    Poncon.data.listType = 'search'
+                    return
+                }
+                Poncon.setting.isBottom_search = 1
+                alert(data.msg)
+            }
+        })
+    }
 }

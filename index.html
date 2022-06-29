@@ -34,10 +34,11 @@
             <!-- 一堆按钮 -->
             <div class="row">
                 <div class="col-md-6 mb-4">
-                    <div class="input-group">
-                        <input type="text" class="border-dark form-control input-username" placeholder="请输入关键词">
+                    <div class="input-group searchBox">
+                        <input type="text" class="border-dark form-control input-keyword bg-white" placeholder="请输入关键词"
+                            onclick="Poncon.showModal('searchCollect')" readonly="readonly">
                         <div class="input-group-append">
-                            <button class="btn btn-dark">搜索</button>
+                            <button class="btn btn-dark" onclick="Poncon.showModal('searchCollect')">搜索</button>
                         </div>
                     </div>
                 </div>
@@ -135,6 +136,34 @@
                         </div>
                         <div class="col-6 d-none d-md-block">
                             <img style="width: 100%;" src="img/insect-6626635_1920.jpg" draggable="false">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 模态框 - 搜索中心 -->
+    <div class="modal modal-searchCollect" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content position-relative">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">搜索列表</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-1 pb-0">
+                    <div class="searchList" style="margin-top: 60px;">
+
+                    </div>
+                </div>
+                <div class="position-absolute modal-body bg-white" style="width: 100%; margin-top: 50px;">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-keyword" placeholder="百度一下 或者 #软件"
+                            onkeyup="Poncon.inputKeyup(event, 'clickSearch')">
+                        <div class="input-group-append">
+                            <button class="btn btn-dark" onclick="Poncon.clickSearch()">搜索</button>
                         </div>
                     </div>
                 </div>

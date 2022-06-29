@@ -87,7 +87,21 @@ $(document).ready(function () {
         var windowHeight = $(this).height()
         if (scrollTop + windowHeight + 50 > scrollHeight && !Poncon.setting.isBottom) {
             Poncon.setting.isBottom = 1
+            // if (Poncon.data.listType == 'search') {
+            // Poncon.searchCollect(Poncon.data.keyword, Poncon.data.nowPage + 1)
+            // } else if (Poncon.data.listType == 'load') {
             Poncon.loadCollectList(Poncon.data.nowPage + 1)
+            // }
+        }
+    })
+
+    $('.modal-searchCollect .modal-body').scroll(function () {
+        var scrollTop = $(this)[0].scrollTop
+        var scrollHeight = $(this)[0].scrollHeight
+        var offsetHeight = $(this)[0].offsetHeight
+        if (scrollTop + offsetHeight + 50 > scrollHeight && !Poncon.setting.isBottom_search) {
+            Poncon.setting.isBottom_search = 1
+            Poncon.searchCollect(Poncon.data.keyword, Poncon.data.nowPage_search + 1)
         }
     })
 })
