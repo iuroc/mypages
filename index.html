@@ -14,6 +14,7 @@
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.staticfile.org/blueimp-md5/2.19.0/js/md5.min.js"></script>
+    <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
     <link rel="stylesheet" href="css/index.css">
     <script src="js/poncon.js"></script>
     <script src="js/index.js"></script>
@@ -46,7 +47,7 @@
                     <div class="row">
                         <div class="col-6">
                             <button class="btn btn-block btn-primary"
-                                onclick="Poncon.showModal('addCollect')">添加收藏</button>
+                                onclick="Poncon.showModal('addCollect', 'add')">添加收藏</button>
                         </div>
                         <div class="col-6">
                             <button class="btn btn-block btn-success">标签列表</button>
@@ -188,7 +189,7 @@
                         <input type="text" class="form-control input-url" placeholder="请输入网页URL"
                             onkeyup="Poncon.inputKeyup(event, 'getHostFromUrl')">
                         <div class="input-group-append">
-                            <button class="btn btn-secondary" onclick="Poncon.getHostFromUrl()">取HOST</button>
+                            <button class="btn btn-secondary getHost" onclick="Poncon.getHostFromUrl()" tabindex="-1">取HOST</button>
                         </div>
                     </div>
                     <div class="input-group mb-3">
@@ -198,7 +199,7 @@
                         <input type="text" class="form-control input-title" placeholder="请输入网页标题"
                             onkeyup="Poncon.inputKeyup(event, 'getWebTitle')">
                         <div class="input-group-append">
-                            <button class="btn btn-secondary getWebTitle" onclick="Poncon.getWebTitle()">获取</button>
+                            <button class="btn btn-secondary getWebTitle" onclick="Poncon.getWebTitle()" tabindex="-1">获取</button>
                         </div>
                     </div>
 
@@ -208,12 +209,12 @@
                                 <input type="text" class="form-control input-tagName" placeholder="标签名"
                                     onkeyup="Poncon.inputKeyup(event, 'addTag')">
                                 <div class="input-group-append">
-                                    <button class="btn btn-danger" onclick="Poncon.addTag()">加标签</button>
+                                    <button class="btn btn-danger" onclick="Poncon.addTag()" tabindex="-1">加标签</button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <button class="btn btn-primary btn-block" onclick="Poncon.addCollect()">添加收藏</button>
+                            <button class="btn btn-primary btn-block addCollect" onclick="Poncon.addCollect()">添加收藏</button>
                         </div>
                     </div>
                     <div class="mb-3">

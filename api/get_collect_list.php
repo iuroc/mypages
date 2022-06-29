@@ -15,6 +15,9 @@ $conn = $poncon->initDb();
 
 $data = [];
 
+$config = $poncon->getConfig();
+$table = $config['table']['collect'];
+
 $username = $poncon->POST('username', null, true);
 $password = $poncon->POST('password', null, true);
 $page = $poncon->POST('page', 0, true);
@@ -27,8 +30,7 @@ if (!$username || !$password) {
 // 登录验证
 $poncon->login($conn, $username, $password);
 
-$config = $poncon->getConfig();
-$table = $config['table']['collect'];
+
 
 
 $sql = "SELECT * FROM `$table` WHERE `username` = '$username' ORDER BY `update_time` DESC LIMIT $pageSize OFFSET $offset;";

@@ -158,17 +158,29 @@ const Poncon = {
      * 显示模态框
      * @param {string} modalName 模态框名称
      */
-    showModal(modalName) {
+    showModal(modalName, mode) {
         if (modalName == 'addCollect') {
             // 新增收藏
             $('.modal-addCollect').modal('show')
-            $('.modal-addCollect .input-url').focus()
+
+            var modal = $('.modal-addCollect')
+            modal.find('.input-url').removeAttr('readonly')
+            modal.find('.getHost').removeAttr('disabled')
+
+            this.editMode = mode // 编辑模式 add: 新增 update: 更新
+            if (mode == 'add') {
+                $('.modal-addCollect .input-url').focus()
+                modal.find('.addCollect').html('添加收藏')
+            } else {
+                modal.find('.addCollect').html('确定编辑')
+            }
         } else if (modalName == 'searchCollect') {
             // 搜索收藏
-            $('.modal-searchCollect').modal('show')
-            var input = $('.modal-searchCollect .input-keyword')
+            var modal = $('.modal-searchCollect')
+            modal.modal('show')
+            var input = modal.find('.input-keyword')
             input.focus()
-            if (!input.val()) {
+            if (!input.val() && modal.find('.searchList').html().match(/^\s*$/)) {
                 this.clickSearch()
             }
         }
@@ -188,7 +200,7 @@ const Poncon = {
         this.tagList = this.unique(this.tagList)
         modal.find('.tagList').html(this.makeTags(this.tagList))
         this.giveClick('.tagList')
-        modal.find('.input-tagName').val('')
+        modal.find('.input-tagName').val('').focus()
     },
     /**
      * 获取URL中的主域部分
@@ -277,20 +289,44 @@ const Poncon = {
                 url: url,
                 title: title,
                 tags: tags,
-                private: private
+                private: private,
+                mode: this.editMode
             },
             contentType: 'application/x-www-form-urlencoded',
             dataType: 'json',
             success: function (data) {
                 if (data.code == 200) {
                     $('.modal-addCollect').modal('hide')
-                    target.loadCollectList(0)
-                    target.cleanInput()
+                    if (target.editMode == 'add') {
+                        // 新增收藏 更新列表 清空表单
+                        target.loadCollectList(0)
+                        target.cleanInput()
+                    } else if (target.editMode == 'update') {
+                        // 更新收藏 更新当前列表项 清空表单
+                        target.updateEditingNode()
+                        target.cleanInput()
+                    }
                     return
                 }
                 alert(data.msg)
             }
         })
+    },
+    /**
+     * 更新正在编辑的收藏项
+     */
+    updateEditingNode() {
+        var node = $(this.editingNode)
+        var modal = $('.modal-addCollect')
+        console.log(this.editingNode)
+        node.find('.title').text(modal.find('.input-title').val())
+        node.find('.url').text(modal.find('.input-url').val())
+        node.find('.card-body').attr('data-private', $('#customSwitch_private')[0].checked ? 1 : 0)
+        var tagsHtml = ''
+        Poncon.tagList.forEach((tag) => {
+            tagsHtml += `<div class="border border-dark rounded px-2 d-inline-block mr-1 mb-2"># ${tag}</div>`
+        })
+        node.find('.tags').html(tagsHtml).attr('data-tags', encodeURIComponent(JSON.stringify(this.tagList)))
     },
     /**
      * 清空输入框
@@ -415,14 +451,14 @@ const Poncon = {
             })
             html += `<div class="${mode}">
                         <div class="card shadow-sm h-100 border-secondary bg-light">
-                            <div class="card-body">
+                            <div class="card-body" data-private="${item.private}">
                                 <h5 class="title mb-2 oyp-limit-line" title="${item.title}" onclick="Poncon.goHref('${item.url}');">${item.title}</h5>
                                 <a class="text-secondary url oyp-limit-line mb-2" href="${item.url}" onclick="Poncon.goHref('${item.url}'); return false;">${item.url}</a>
-                                <div class="tags">${tagsHtml}</div>
+                                <div class="tags" data-tags="${encodeURIComponent(JSON.stringify(item.tag_list))}">${tagsHtml}</div>
                                 <div class="btns">
-                                    <a class="text-danger mr-2" onclick="Poncon.listItemDelete()">删除</a>
-                                    <a class="text-primary mr-2" onclick="Poncon.listItemCopy()">复制</a>
-                                    <a class="text-success mr-2" onclick="Poncon.listItemEdit()">编辑</a>
+                                    <a class="text-danger mr-2" onclick="Poncon.listItemDelete(event, '${item.url}', '${item.update_time}')">删除</a>
+                                    <a class="text-primary mr-2 copybtn" data-clipboard-text="${item.url}" onclick="alert('复制成功')">复制</a>
+                                    <a class="text-success mr-2" onclick="Poncon.listItemEdit(event)">编辑</a>
                                     <span class="float-right text-muted">${this.parseDate(parseInt(item.update_time) * 1000)}</span>
                                 </div>
                             </div>
@@ -430,6 +466,57 @@ const Poncon = {
                     </div>`
         })
         return html
+    },
+    /**
+     * 编辑收藏记录
+     * @param {event} event 事件对象
+     */
+    listItemEdit(event) {
+        var ele = $(event.target).parents('.card-body')
+        var title = ele.find('.title').text()
+        var url = ele.find('.url').text()
+        var tags = JSON.parse(decodeURIComponent(ele.find('.tags').attr('data-tags')))
+        this.tagList = tags
+        this.tagList = this.unique(this.tagList)
+        var private = ele.attr('data-private')
+        this.showModal('addCollect', 'update')
+        var modal = $('.modal-addCollect')
+        modal.find('.tagList').html(this.makeTags(this.tagList))
+        this.giveClick('.tagList')
+        modal.find('.input-title').val(title)
+        modal.find('.input-url').val(url).attr('readonly', 'readonly')
+        modal.find('.getHost').attr('disabled', 'disabled')
+        modal.find('#customSwitch_private')[0].checked = private == '1' ? true : false
+        this.editMode = 'update'
+
+        Poncon.editingNode = $(event.target).parents('.col-xl-4') // 正在编辑的节点
+    },
+    /**
+     * 删除收藏
+     */
+    listItemDelete(event, url, time) {
+        if (!confirm('确定删除吗？')) {
+            return
+        }
+        $.ajax({
+            method: 'post',
+            url: this.baseUrl + 'api/delete_collect.php',
+            data: {
+                username: this.getStorage('username'),
+                password: this.getStorage('password'),
+                url: url,
+                time: time
+            },
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    $(event.target).parent().parent().parent().parent().remove()
+                    return
+                }
+                alert(data.msg)
+            }
+        })
     },
     /**
      * 跳转网址
