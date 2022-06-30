@@ -38,6 +38,8 @@ if (isset($matches[1])) {
     $result = mysqli_query($conn, $sql);
     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         $row['tag_list'] = json_decode($row['tag_list'], true);
+        unset($row['id']);
+        unset($row['username']);
         array_push($data, $row);
     }
     $poncon->success('获取成功', $data);
@@ -47,6 +49,8 @@ if (isset($matches[1])) {
     $result = mysqli_query($conn, $sql);
     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         $row['tag_list'] = json_decode($row['tag_list'], true);
+        unset($row['id']);
+        unset($row['username']);
         array_push($data, $row);
     }
     $poncon->success('获取成功', $data);

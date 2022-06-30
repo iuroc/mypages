@@ -235,6 +235,8 @@ const Poncon = {
             var newWindowOpen = !$('#customSwitch_newWindow')[0].checked
             target.setStorage('newWindowOpen', newWindowOpen)
         })
+        var shareUrl = window.location.origin + window.location.pathname.replace('index.html', '') + 'share/?u=' + this.getStorage('username')
+        modal.find('.input-shareUrl').val(shareUrl)
     },
     /**
      * 加载标签列表

@@ -25,6 +25,10 @@ $poncon->login($conn, $username, $password);
 $sql = "SELECT `tag_list` FROM `{$config['table']['collect']}` WHERE `username` = '$username';";
 
 $result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    $poncon->error(903, '数据库错误');
+}
 $data = [];
 
 while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {

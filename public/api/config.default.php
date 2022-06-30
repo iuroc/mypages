@@ -17,3 +17,4 @@ $config = [
         'collect' => 'mypages_collect' // 收藏表
     ]
 ];
+
