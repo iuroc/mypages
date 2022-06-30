@@ -32,7 +32,7 @@ if (!$username || !$password) {
 $poncon->login($conn, $username, $password);
 
 // 查询包含标签列表的数据
-$sql = "SELECT * FROM `$table` WHERE `username` = '$username' AND (`tag_list` LIKE '%\"" . implode("\"%' OR `tag_list` LIKE '%\"", $tags) . "\"%') LIMIT $pageSize OFFSET $offset;";
+$sql = "SELECT * FROM `$table` WHERE `username` = '$username' AND (`tag_list` LIKE '%\"" . implode("\"%' AND `tag_list` LIKE '%\"", $tags) . "\"%') LIMIT $pageSize OFFSET $offset;";
 
 $result = mysqli_query($conn, $sql);
 
