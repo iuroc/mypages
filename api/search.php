@@ -34,7 +34,7 @@ preg_match('/^#\s*(.*)$/', $keyword, $matches);
 if (isset($matches[1])) {
     // 搜索标签
     $tag = $matches[1];
-    $sql = "SELECT * FROM `$table` WHERE `username` = '$username' AND (`tag_list` LIKE '%$tag%' ORDER BY `update_time`) DESC LIMIT $pageSize OFFSET $offset;";
+    $sql = "SELECT * FROM `$table` WHERE `username` = '$username' AND `tag_list` LIKE '%$tag%' ORDER BY `update_time` DESC LIMIT $pageSize OFFSET $offset;";
     $result = mysqli_query($conn, $sql);
     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         $row['tag_list'] = json_decode($row['tag_list'], true);
