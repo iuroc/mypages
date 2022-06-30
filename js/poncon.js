@@ -759,7 +759,7 @@ const Poncon = {
             })
             html += `<div class="${_class}">
                         <div class="card shadow-sm h-100 border-secondary bg-light">
-                            <div class="card-body px-3 py-2" data-private="${item.private}">
+                            <div class="card-body px-3 py-2 d-flex flex-column justify-content-center" data-private="${item.private}">
                                 <div class="title mb-1 oyp-limit-line font-weight-bold" title="${item.title}" onclick="Poncon.goHref('${item.url}');">${item.title}</div>
                                 <a class="text-secondary url oyp-limit-line small mb-1" href="${item.url}" onclick="Poncon.goHref('${item.url}'); return false;">${item.url}</a>
                                 <div class="note text-info mb-1">${item.note}</div>
