@@ -10,7 +10,7 @@
 
 - 将 `public` 目录上传到主机
 - 复制 `config.default.php` 为 `config.php`
-- 将 `config.php` 中的数据库账号密码填写完整
+- 将 `config.php` 中的数据库信息填写完整
 - 运行 `index.html` 即可
 
 ## 示意图
