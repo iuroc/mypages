@@ -11,7 +11,6 @@ $poncon = new Poncon();
 
 // 初始化数据库
 $conn = $poncon->initDb();
-
 $username = $poncon->POST('username', null, true);
 $password = $poncon->POST('password', null, true);
 $keyword = $poncon->POST('keyword', null, true);
