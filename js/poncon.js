@@ -645,6 +645,9 @@ const Poncon = {
                     }
                     var html = target.makeList(collectList, 'byTag')
                     modal.find('.collectList').append(html)
+                    new ClipboardJS('.copybtn', {
+                        container: modal[0]
+                    })
                     target.data.nowPage_byTag = page
                     target.setting().isBottom_byTag = 0
                     return
@@ -739,6 +742,7 @@ const Poncon = {
 
                     var html = target.makeList(data.data)
                     _page.find('.collectList').append(html)
+                    new ClipboardJS('.copybtn')
                     target.data.nowPage = page
                     target.setting().isBottom = 0
                     return
@@ -902,6 +906,9 @@ const Poncon = {
                     }
                     var html = target.makeList(data.data, 'search')
                     modal.find('.searchList').append(html)
+                    new ClipboardJS('.copybtn', {
+                        container: modal[0]
+                    })
                     target.data.nowPage_search = page
                     target.data.keyword = keyword
                     target.setting().isBottom_search = 0

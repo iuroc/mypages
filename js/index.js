@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('body').removeClass('fade')
-    new ClipboardJS('.copybtn');
+    new ClipboardJS('.copybtn')
     if (!location.hash.split('/')[1]) {
         history.replaceState({}, null, Poncon.entryPage)
     }
