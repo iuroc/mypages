@@ -6,6 +6,13 @@
 
 - 简约、轻量
 
+## 安装说明
+
+- 将项目源代码上传到主机目录
+- 复制 `config.default.php` 为 `config.php`
+- 将 `config.php` 中的数据库账号密码填写完整
+- 运行 `index.html` 即可
+
 ## 功能
 
 - 用户登陆注册
