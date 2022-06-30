@@ -165,6 +165,7 @@ const Poncon = {
      */
     showModal(modalName, mode, mode2) {
         if (modalName == 'addCollect') {
+            var modal = $('.modal-addCollect')
             if (this.editMode == 'update' && mode == 'add') {
                 this.cleanInput()
             }
@@ -182,10 +183,16 @@ const Poncon = {
                     modal.modal('show')
                 })
             }
+
+            // 加载标签列表
+            Poncon.loadTagList('edit')
+            var tags = Poncon.data.tagListObj
+            var tagsHtml = this.makeTags(tags, 'edit')
+            modal.find('.allTagList').html(tagsHtml)
             // 新增收藏
             $('.modal-addCollect').modal('show')
 
-            var modal = $('.modal-addCollect')
+
             modal.find('.input-url').removeAttr('readonly')
             modal.find('.getHost').removeAttr('disabled')
 
@@ -232,12 +239,15 @@ const Poncon = {
     /**
      * 加载标签列表
      */
-    loadTagList() {
-        var modal = $('.modal-tagList')
+    loadTagList(mode) {
+        if (mode != 'edit') {
+            var modal = $('.modal-tagList')
+            var target = this
+            this.data.tagListObj = {}
+            this.data.tagListObjTemp = {}
+            this.data.tagListObjSelected = {}
+        }
         var target = this
-        this.data.tagListObj = {}
-        this.data.tagListObjTemp = {}
-        this.data.tagListObjSelected = {}
         $.ajax({
             method: 'post',
             url: this.baseUrl + 'api/get_tag_list.php',
@@ -249,6 +259,10 @@ const Poncon = {
             dataType: 'json',
             success: function (data) {
                 if (data.code == 200) {
+                    if (mode == 'edit') {
+                        target.data.tagListObj = data.data
+                        return
+                    }
                     if (data.data.length == 0) {
                         modal.find('.tagList').html(`<img src="img/cat-2722309_640.png" class="img-fluid mb-4" style="max-height: 150px;" alt="暂无标签">
                                                     <div class="h5 text-muted mb-4">
@@ -263,8 +277,10 @@ const Poncon = {
                     return
                 }
                 alert(data.msg)
-            }
+            },
+            async: false
         })
+        return this.data.tagListObj
     },
     loadTagListHtml(obj) {
         this.data.tagListObj = obj
@@ -469,11 +485,37 @@ const Poncon = {
                 html += `<div class="btn btn-sm btn-light border mb-3 mr-3" onclick="Poncon.tagListChecked(event)"><span class="tag">${tag}</span> <span class="ml-1 badge badge-light">${tagList[tag]}</span></div>`
             }
             return html
+        } else if (mode == 'edit') {
+            for (var tag in tagList) {
+                html += `<div class="btn btn-sm btn-light border mb-3 mr-3" onclick="Poncon.addTagListChecked(event)"><span class="tag">${tag}</span> <span class="ml-1 badge badge-light">${tagList[tag]}</span></div>`
+            }
+            return html
         }
         tagList.forEach(tag => {
             html += `<div class="btn btn-sm btn-secondary mb-3 mr-3">${tag}</div>`
         })
         return html
+    },
+    /**
+     * 新增收藏或编辑收藏时标签的单击事件
+     * @param {event} event 事件对象
+     */
+    addTagListChecked(event) {
+        var ele = $(event.target)
+        if (!ele.hasClass('btn')) {
+            ele = ele.parent()
+        }
+        var tagName = ele.find('.tag').text()
+        var modal = $('.modal-addCollect')
+        tagName = $.trim(tagName)
+        if (!tagName) {
+            return
+        }
+        this.tagList.push(tagName)
+        this.tagList = this.unique(this.tagList)
+        modal.find('.tagList').html(this.makeTags(this.tagList))
+        this.giveClick('.tagList')
+        modal.find('.input-tagName').val('').focus()
     },
     tagListChecked(event) {
         var ele = $(event.target)
@@ -522,6 +564,7 @@ const Poncon = {
         if (keyword) {
             this.allSelectTag()
         }
+        this.backToTagList()
     },
     /**
      * 全选标签
