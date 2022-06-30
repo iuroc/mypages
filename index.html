@@ -28,7 +28,7 @@
                 onclick="history.back()">
             <h2 class="webTitle mb-0 mr-auto"></h2>
             <div class="float-right userCenter">
-                <button class="btn btn-danger">个人中心</button>
+                <button class="btn btn-danger" onclick="Poncon.showModal('userSetting')">个人中心</button>
             </div>
         </div>
         <div class="page-home page-oyp">
@@ -50,7 +50,8 @@
                                 onclick="Poncon.showModal('addCollect', 'add')">添加收藏</button>
                         </div>
                         <div class="col-6">
-                            <button class="btn btn-block btn-success">标签列表</button>
+                            <button class="btn btn-block btn-success"
+                                onclick="Poncon.showModal('tagList')">标签列表</button>
                         </div>
                     </div>
                 </div>
@@ -73,14 +74,15 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">账号</span>
                                         </div>
-                                        <input type="text" class="form-control input-username" placeholder="请输入用户名">
+                                        <input type="text" class="form-control input-username"
+                                            placeholder="请输入用户名 4-20位">
                                     </div>
                                     <div class="input-group mb-4">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">密码</span>
                                         </div>
-                                        <input type="password" class="form-control input-password" placeholder="请输入密码"
-                                            autocomplete="new-password">
+                                        <input type="password" class="form-control input-password"
+                                            placeholder="请输入密码 8-20位" autocomplete="new-password">
                                     </div>
                                     <div class="row mb-4">
                                         <div class="col">
@@ -103,14 +105,15 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">账号</span>
                                         </div>
-                                        <input type="text" class="form-control input-username" placeholder="请输入用户名">
+                                        <input type="text" class="form-control input-username"
+                                            placeholder="请输入用户名 4-20位">
                                     </div>
                                     <div class="input-group mb-4">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">密码</span>
                                         </div>
-                                        <input type="password" class="form-control input-password" placeholder="请输入密码"
-                                            autocomplete="new-password">
+                                        <input type="password" class="form-control input-password"
+                                            placeholder="请输入密码 8-20位" autocomplete="new-password">
                                     </div>
                                     <div class="input-group mb-4">
                                         <div class="input-group-prepend">
@@ -143,9 +146,9 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 模态框 - 搜索中心 -->
-    <div class="modal modal-searchCollect" tabindex="-1">
+    <div class="modal modal-searchCollect " tabindex="-1">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content position-relative">
                 <div class="modal-header border-0">
@@ -171,6 +174,40 @@
             </div>
         </div>
     </div>
+
+    <!-- 模态框 - 标签列表 -->
+    <div class="modal modal-tagList" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content position-relative">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">标签列表</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-1 pb-0">
+                    <div class="tagList text-center" style="margin-top: 60px;"></div>
+                    <div class="collectList" style="display: none; margin-top: 60px;"></div>
+                </div>
+                <div class="position-absolute modal-body bg-white" style="width: 100%; margin-top: 50px;">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-keyword" placeholder="筛选列表"
+                            onkeyup="Poncon.screeningTag()">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info allSelectTag" onclick="Poncon.allSelectTag()">全选</button>
+                    <button class="btn btn-light allUnSelectTag" onclick="Poncon.allUnSelectTag()"
+                        style="display: none;">全不选</button>
+                    <button class="btn btn-success submitSelect" disabled="disabled"
+                        onclick="Poncon.loadCollectListByTag(Poncon.data.tagListObjSelected, 0)">加载列表</button>
+                    <button class="btn btn-secondary backToList" style="display: none;"
+                        onclick="Poncon.backToTagList()">返回标签列表</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 模态框 - 新增收藏 -->
     <div class="modal modal-addCollect" tabindex="-1">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -189,7 +226,8 @@
                         <input type="text" class="form-control input-url" placeholder="请输入网页URL"
                             onkeyup="Poncon.inputKeyup(event, 'getHostFromUrl')">
                         <div class="input-group-append">
-                            <button class="btn btn-secondary getHost" onclick="Poncon.getHostFromUrl()" tabindex="-1">取HOST</button>
+                            <button class="btn btn-secondary getHost" onclick="Poncon.getHostFromUrl()"
+                                tabindex="-1">取HOST</button>
                         </div>
                     </div>
                     <div class="input-group mb-3">
@@ -199,7 +237,8 @@
                         <input type="text" class="form-control input-title" placeholder="请输入网页标题"
                             onkeyup="Poncon.inputKeyup(event, 'getWebTitle')">
                         <div class="input-group-append">
-                            <button class="btn btn-secondary getWebTitle" onclick="Poncon.getWebTitle()" tabindex="-1">获取</button>
+                            <button class="btn btn-secondary getWebTitle" onclick="Poncon.getWebTitle()"
+                                tabindex="-1">获取</button>
                         </div>
                     </div>
 
@@ -214,7 +253,8 @@
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <button class="btn btn-primary btn-block addCollect" onclick="Poncon.addCollect()">添加收藏</button>
+                            <button class="btn btn-primary btn-block addCollect"
+                                onclick="Poncon.addCollect()">添加收藏</button>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -227,6 +267,40 @@
                         </div>
                     </div>
                     <div class="tagList">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 模态框 - 个人中心 -->
+    <div class="modal modal-userSetting" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">个人中心</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-1">
+                    <div class="text-muted font-weight-bold mb-3">设置</div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">新窗口打开</span>
+                        </div>
+                        <div class="form-control">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch_newWindow"
+                                    checked="checked">
+                                <label class="custom-control-label" for="customSwitch_newWindow">开启</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <button class="btn btn-danger" onclick="Poncon.logout()">退出登录</button>
                     </div>
                 </div>
 

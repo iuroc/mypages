@@ -6,11 +6,16 @@ const Poncon = {
     loginStatus: 0, // 登录状态 0:未登录 1: 已登录
     tagList: [], // 标签列表
     pageLoad: {}, // 页面加载状态
-    setting: { // 网页设置
-        newWindowOpen: true, // 新窗口打开
+    setting() { // 网页设置
+        return {
+            newWindowOpen: !this.getStorage('newWindowOpen'), // 当前页打开
+        }
     },
     data: { // 网页数据
         listType: 'load', // 列表类型 load 正常加载 search 搜索
+        tagListObjSelected: {}, // 当前选中的标签
+        tagListObj: {}, // 标签列表
+        tagListObjTemp: {}, // 筛选后的标签列表
     },
     /**
      * 用户登陆
@@ -78,7 +83,7 @@ const Poncon = {
     setStorage(key, value) {
         var data = localStorage[this.storageKey]
         data = data ? data : '{}'
-        var data = JSON.parse(data)
+        data = JSON.parse(data)
         data[key] = value
         localStorage[this.storageKey] = JSON.stringify(data)
     },
@@ -158,8 +163,25 @@ const Poncon = {
      * 显示模态框
      * @param {string} modalName 模态框名称
      */
-    showModal(modalName, mode) {
+    showModal(modalName, mode, mode2) {
         if (modalName == 'addCollect') {
+            if (this.editMode == 'update' && mode == 'add') {
+                this.cleanInput()
+            }
+            $('.modal-addCollect').unbind()
+            if (mode2 == 'search') {
+                $('.modal-addCollect').on('hidden.bs.modal', function () {
+                    var modal = $('.modal-searchCollect')
+                    modal.modal('show')
+                    var input = modal.find('.input-keyword')
+                    input.focus()
+                })
+            } else if (mode2 == 'byTag') {
+                $('.modal-addCollect').on('hidden.bs.modal', function () {
+                    var modal = $('.modal-tagList')
+                    modal.modal('show')
+                })
+            }
             // 新增收藏
             $('.modal-addCollect').modal('show')
 
@@ -183,7 +205,89 @@ const Poncon = {
             if (!input.val() && modal.find('.searchList').html().match(/^\s*$/)) {
                 this.clickSearch()
             }
+        } else if (modalName == 'tagList') {
+            var modal = $('.modal-tagList')
+            modal.modal('show')
+            this.loadTagList()
+            this.backToTagList()
+            modal.find('.input-keyword').val('').focus()
+        } else if (modalName == 'userSetting') {
+            var modal = $('.modal-userSetting')
+            modal.modal('show')
+            this.loadSetting()
         }
+    },
+    /**
+     * 加载设置项
+     */
+    loadSetting() {
+        var modal = $('.modal-userSetting')
+        var target = this
+        $('#customSwitch_newWindow')[0].checked = this.setting().newWindowOpen
+        $('#customSwitch_newWindow').unbind().on('change', function () {
+            var newWindowOpen = !$('#customSwitch_newWindow')[0].checked
+            target.setStorage('newWindowOpen', newWindowOpen)
+        })
+    },
+    /**
+     * 加载标签列表
+     */
+    loadTagList() {
+        var modal = $('.modal-tagList')
+        var target = this
+        this.data.tagListObj = {}
+        this.data.tagListObjTemp = {}
+        this.data.tagListObjSelected = {}
+        $.ajax({
+            method: 'post',
+            url: this.baseUrl + 'api/get_tag_list.php',
+            data: {
+                username: this.getStorage('username'),
+                password: this.getStorage('password')
+            },
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    if (data.data.length == 0) {
+                        modal.find('.tagList').html(`<img src="img/cat-2722309_640.png" class="img-fluid mb-4" style="max-height: 150px;" alt="暂无标签">
+                                                    <div class="h5 text-muted mb-4">
+                                                        当前暂无标签
+                                                    </div>`)
+                        return
+                    }
+                    target.loadTagListHtml(data.data)
+                    modal.find('.allUnSelectTag').hide()
+                    modal.find('.allSelectTag').show()
+                    modal.find('.submitSelect').attr('disabled', 'disabled')
+                    return
+                }
+                alert(data.msg)
+            }
+        })
+    },
+    loadTagListHtml(obj) {
+        this.data.tagListObj = obj
+        this.data.tagListObjTemp = obj
+        var modal = $('.modal-tagList')
+        var list = this.sortByKey(obj)
+        var html = this.makeTags(list, 'all')
+        modal.find('.tagList').html(html)
+
+    },
+    /**
+     * 对象按键名的拼音排序
+     * @param {object} obj 对象
+     * @returns {object} 排序后的对象
+     */
+    sortByKey(obj) {
+        var list = {}
+        Object.keys(obj).sort(function (a, b) {
+            return a.localeCompare(b)
+        }).forEach((key) => {
+            list[key] = obj[key]
+        })
+        return list
     },
     /**
      * 新增标签
@@ -234,7 +338,7 @@ const Poncon = {
         modal.find('button.getWebTitle').html('获取中').attr('disabled', 'disabled')
         $.ajax({
             method: 'post',
-            url: Poncon.baseUrl + 'api/get_title.php',
+            url: this.baseUrl + 'api/get_title.php',
             data: {
                 url: url
             },
@@ -318,15 +422,15 @@ const Poncon = {
     updateEditingNode() {
         var node = $(this.editingNode)
         var modal = $('.modal-addCollect')
-        console.log(this.editingNode)
         node.find('.title').text(modal.find('.input-title').val())
         node.find('.url').text(modal.find('.input-url').val())
         node.find('.card-body').attr('data-private', $('#customSwitch_private')[0].checked ? 1 : 0)
         var tagsHtml = ''
-        Poncon.tagList.forEach((tag) => {
+        this.tagList.forEach((tag) => {
             tagsHtml += `<div class="border border-dark rounded px-2 d-inline-block mr-1 mb-2"># ${tag}</div>`
         })
         node.find('.tags').html(tagsHtml).attr('data-tags', encodeURIComponent(JSON.stringify(this.tagList)))
+        node.find('.update_time').html(this.parseDate(new Date().getTime()))
     },
     /**
      * 清空输入框
@@ -336,7 +440,7 @@ const Poncon = {
         modal.find('.input-url').val('')
         modal.find('.input-title').val('')
         modal.find('.input-tagName').val('')
-        Poncon.tagList = []
+        this.tagList = []
         modal.find('.tagList').html('')
     },
     /**
@@ -355,14 +459,171 @@ const Poncon = {
     /**
      * 生成标签列表
      * @param {array} tagList 数据列表
+     * @param {string} mode all: 所有标签
      * @returns {string}
      */
-    makeTags(tagList) {
+    makeTags(tagList, mode) {
         var html = ''
+        if (mode == 'all') {
+            for (var tag in tagList) {
+                html += `<div class="btn btn-sm btn-light border mb-3 mr-3" onclick="Poncon.tagListChecked(event)"><span class="tag">${tag}</span> <span class="ml-1 badge badge-light">${tagList[tag]}</span></div>`
+            }
+            return html
+        }
         tagList.forEach(tag => {
             html += `<div class="btn btn-sm btn-secondary mb-3 mr-3">${tag}</div>`
         })
         return html
+    },
+    tagListChecked(event) {
+        var ele = $(event.target)
+        if (!ele.hasClass('btn')) {
+            ele = ele.parent()
+        }
+        var tagName = ele.find('.tag').text()
+        if (ele.hasClass('btn-light')) {
+            ele.removeClass('btn-light')
+            ele.addClass('btn-primary')
+            this.data.tagListObjSelected[tagName] = this.data.tagListObj[tagName]
+        } else {
+            ele.removeClass('btn-primary')
+            ele.addClass('btn-light')
+            delete this.data.tagListObjSelected[tagName]
+        }
+        if (Object.keys(this.data.tagListObjSelected).length
+            == Object.keys(this.data.tagListObjTemp).length
+            && Object.keys(this.data.tagListObjTemp).length > 0) {
+            var modal = $('.modal-tagList')
+            modal.find('.allUnSelectTag').show()
+            modal.find('.allSelectTag').hide()
+        } else {
+            var modal = $('.modal-tagList')
+            modal.find('.allUnSelectTag').hide()
+            modal.find('.allSelectTag').show()
+        }
+        this.disabledButton()
+    },
+    /**
+     * 筛选标签
+     */
+    screeningTag() {
+        var modal = $('.modal-tagList')
+        var keyword = $.trim(modal.find('.input-keyword').val())
+        this.data.tagListObjSelected = {}
+        this.data.tagListObjTemp = {}
+        for (var tag in this.data.tagListObj) {
+            if (tag.indexOf(keyword) != -1) {
+                this.data.tagListObjTemp[tag] = this.data.tagListObj[tag]
+            }
+        }
+        var list = this.data.tagListObjTemp
+        list = this.sortByKey(list)
+        modal.find('.tagList').html(this.makeTags(list, 'all'))
+        if (keyword) {
+            this.allSelectTag()
+        }
+    },
+    /**
+     * 全选标签
+     */
+    allSelectTag() {
+        var modal = $('.modal-tagList')
+        modal.find('.allUnSelectTag').show()
+        modal.find('.allSelectTag').hide()
+        var tagList = $('.tagList')
+        tagList.find('.btn').removeClass('btn-light')
+        tagList.find('.btn').addClass('btn-primary')
+        this.data.tagListObjSelected = JSON.parse(JSON.stringify(this.data.tagListObjTemp))
+        this.disabledButton()
+    },
+    /**
+     * 取消全选标签
+     */
+    allUnSelectTag() {
+        var modal = $('.modal-tagList')
+        modal.find('.allUnSelectTag').hide()
+        modal.find('.allSelectTag').show()
+        var tagList = $('.tagList')
+        tagList.find('.btn').removeClass('btn-primary')
+        tagList.find('.btn').addClass('btn-light')
+        this.data.tagListObjSelected = {}
+        this.disabledButton()
+    },
+    /**
+     * 当全不选时禁用确定按钮
+     */
+    disabledButton() {
+        if (Object.keys(this.data.tagListObjSelected).length == 0) {
+            $('.modal-tagList').find('.submitSelect').attr('disabled', 'disabled')
+        } else {
+            $('.modal-tagList').find('.submitSelect').removeAttr('disabled')
+        }
+    },
+    /**
+     * 根据标签获取收藏列表
+     * @param {object} tags 标签名
+     */
+    loadCollectListByTag(tags, page) {
+        var modal = $('.modal-tagList')
+        if (page == 0) {
+            modal.find('.tagList').hide()
+            modal.find('.collectList').html('').show()
+            modal.find('.allSelectTag, .allUnSelectTag').hide()
+            modal.find('.submitSelect').hide()
+            modal.find('.backToList').show()
+        }
+        tags = JSON.stringify(Object.keys(tags))
+        var target = this
+        $.ajax({
+            method: 'post',
+            url: this.baseUrl + 'api/get_collect_list_by_tag.php',
+            data: {
+                tags: tags,
+                username: this.getStorage('username'),
+                password: this.getStorage('password'),
+                page: page,
+                pageSize: 15
+            },
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    var collectList = data.data
+                    if (collectList.length == 0) {
+                        target.setting().isBottom_byTag = 1
+                        return
+                    }
+                    var html = target.makeList(collectList, 'byTag')
+                    modal.find('.collectList').append(html)
+                    target.data.nowPage_byTag = page
+                    target.setting().isBottom_byTag = 0
+                    return
+                }
+                target.setting().isBottom_byTag = 1
+                alert(data.msg)
+            }
+        })
+    },
+    /**
+     * 从筛选后的收藏列表返回标签列表
+     */
+    backToTagList() {
+        var modal = $('.modal-tagList')
+        modal.find('.tagList').show()
+        modal.find('.collectList').hide()
+        modal.find('.submitSelect').show()
+        modal.find('.backToList').hide()
+        if (Object.keys(this.data.tagListObjSelected).length
+            == Object.keys(this.data.tagListObjTemp).length
+            && Object.keys(this.data.tagListObjTemp).length > 0) {
+            var modal = $('.modal-tagList')
+            modal.find('.allUnSelectTag').show()
+            modal.find('.allSelectTag').hide()
+        } else {
+            var modal = $('.modal-tagList')
+            modal.find('.allUnSelectTag').hide()
+            modal.find('.allSelectTag').show()
+        }
     },
     /**
      * 
@@ -422,18 +683,18 @@ const Poncon = {
             success: function (data) {
                 if (data.code == 200) {
                     if (data.data.length == 0) {
-                        target.setting.isBottom = 1
+                        target.setting().isBottom = 1
                         return
                     }
+
                     var html = target.makeList(data.data)
                     _page.find('.collectList').append(html)
-                    Poncon.data.nowPage = page
-                    Poncon.setting.isBottom = 0
-                    Poncon.data.listType = 'load'
+                    target.data.nowPage = page
+                    target.setting().isBottom = 0
                     return
                 }
-                Poncon.setting.isBottom = 1
-                alert(daat.msg)
+                target.setting().isBottom = 1
+                // alert(data.msg)
             }
         })
     },
@@ -443,13 +704,13 @@ const Poncon = {
      */
     makeList(dataList, mode) {
         var html = ''
-        mode = mode == 'search' ? 'mb-4' : 'col-xl-4 col-lg-6 mb-4'
+        _class = (mode == 'search') || (mode == 'byTag') ? 'mb-4' : 'col-xl-4 col-lg-6 mb-4'
         dataList.forEach((item) => {
             var tagsHtml = ''
             item.tag_list.forEach((tag) => {
                 tagsHtml += `<div class="border border-dark rounded px-2 d-inline-block mr-1 mb-2"># ${tag}</div>`
             })
-            html += `<div class="${mode}">
+            html += `<div class="${_class}">
                         <div class="card shadow-sm h-100 border-secondary bg-light">
                             <div class="card-body" data-private="${item.private}">
                                 <h5 class="title mb-2 oyp-limit-line" title="${item.title}" onclick="Poncon.goHref('${item.url}');">${item.title}</h5>
@@ -458,8 +719,8 @@ const Poncon = {
                                 <div class="btns">
                                     <a class="text-danger mr-2" onclick="Poncon.listItemDelete(event, '${item.url}', '${item.update_time}')">删除</a>
                                     <a class="text-primary mr-2 copybtn" data-clipboard-text="${item.url}" onclick="alert('复制成功')">复制</a>
-                                    <a class="text-success mr-2" onclick="Poncon.listItemEdit(event)">编辑</a>
-                                    <span class="float-right text-muted">${this.parseDate(parseInt(item.update_time) * 1000)}</span>
+                                    <a class="text-success mr-2" onclick="Poncon.listItemEdit(event, '${mode}')">编辑</a>
+                                    <span class="float-right text-muted update_time">${this.parseDate(parseInt(item.update_time) * 1000)}</span>
                                 </div>
                             </div>
                         </div>
@@ -471,7 +732,7 @@ const Poncon = {
      * 编辑收藏记录
      * @param {event} event 事件对象
      */
-    listItemEdit(event) {
+    listItemEdit(event, mode) {
         var ele = $(event.target).parents('.card-body')
         var title = ele.find('.title').text()
         var url = ele.find('.url').text()
@@ -479,7 +740,12 @@ const Poncon = {
         this.tagList = tags
         this.tagList = this.unique(this.tagList)
         var private = ele.attr('data-private')
-        this.showModal('addCollect', 'update')
+        this.showModal('addCollect', 'update', mode)
+        if (mode == 'search') {
+            $('.modal-searchCollect').modal('hide')
+        } else if (mode == 'byTag') {
+            $('.modal-tagList').modal('hide')
+        }
         var modal = $('.modal-addCollect')
         modal.find('.tagList').html(this.makeTags(this.tagList))
         this.giveClick('.tagList')
@@ -488,8 +754,7 @@ const Poncon = {
         modal.find('.getHost').attr('disabled', 'disabled')
         modal.find('#customSwitch_private')[0].checked = private == '1' ? true : false
         this.editMode = 'update'
-
-        Poncon.editingNode = $(event.target).parents('.col-xl-4') // 正在编辑的节点
+        this.editingNode = $(event.target).parents('.mb-4') // 正在编辑的节点
     },
     /**
      * 删除收藏
@@ -523,7 +788,7 @@ const Poncon = {
      * @param {url} url 网址
      */
     goHref(url) {
-        if (Poncon.setting.newWindowOpen) {
+        if (this.setting().newWindowOpen) {
             window.open(url)
             return
         }
@@ -579,20 +844,29 @@ const Poncon = {
             success: function (data) {
                 if (data.code == 200) {
                     if (data.data.length == 0) {
-                        target.setting.isBottom_search = 1
+                        target.setting().isBottom_search = 1
                         return
                     }
                     var html = target.makeList(data.data, 'search')
                     modal.find('.searchList').append(html)
-                    Poncon.data.nowPage_search = page
-                    Poncon.data.keyword = keyword
-                    Poncon.setting.isBottom_search = 0
-                    Poncon.data.listType = 'search'
+                    target.data.nowPage_search = page
+                    target.data.keyword = keyword
+                    target.setting().isBottom_search = 0
                     return
                 }
-                Poncon.setting.isBottom_search = 1
+                this.setting().isBottom_search = 1
                 alert(data.msg)
             }
         })
+    },
+    /**
+     * 退出登录
+     */
+    logout() {
+        if (confirm('确定退出吗？')) {
+            localStorage.removeItem(this.storageKey)
+            location.reload()
+        }
+
     }
 }
