@@ -388,6 +388,7 @@ const Poncon = {
         var modal = $('.modal-addCollect')
         var url = $.trim(modal.find('.input-url').val())
         var title = $.trim(modal.find('.input-title').val())
+        var note = $.trim(modal.find('.input-note').val())
         try {
             var temp = new URL(url)
         } catch {
@@ -410,7 +411,8 @@ const Poncon = {
                 title: title,
                 tags: tags,
                 private: private,
-                mode: this.editMode
+                mode: this.editMode,
+                note: note
             },
             contentType: 'application/x-www-form-urlencoded',
             dataType: 'json',
@@ -439,11 +441,12 @@ const Poncon = {
         var node = $(this.editingNode)
         var modal = $('.modal-addCollect')
         node.find('.title').text(modal.find('.input-title').val())
+        node.find('.note').text(modal.find('.input-note').val())
         node.find('.url').text(modal.find('.input-url').val())
         node.find('.card-body').attr('data-private', $('#customSwitch_private')[0].checked ? 1 : 0)
         var tagsHtml = ''
         this.tagList.forEach((tag) => {
-            tagsHtml += `<div class="border border-dark rounded px-2 d-inline-block mr-1 mb-2"># ${tag}</div>`
+            tagsHtml += `<div class="border border-dark rounded small px-2 d-inline-block mr-1 mb-2">${tag}</div>`
         })
         node.find('.tags').html(tagsHtml).attr('data-tags', encodeURIComponent(JSON.stringify(this.tagList)))
         node.find('.update_time').html(this.parseDate(new Date().getTime()))
@@ -458,6 +461,7 @@ const Poncon = {
         modal.find('.input-tagName').val('')
         this.tagList = []
         modal.find('.tagList').html('')
+        modal.find('.input-note').val('')
     },
     /**
      * 删除数组中某个值
@@ -482,17 +486,17 @@ const Poncon = {
         var html = ''
         if (mode == 'all') {
             for (var tag in tagList) {
-                html += `<div class="btn btn-sm btn-light border mb-3 mr-3" onclick="Poncon.tagListChecked(event)"><span class="tag">${tag}</span> <span class="ml-1 badge badge-light">${tagList[tag]}</span></div>`
+                html += `<div class="btn btn-sm btn-light border mb-2 mr-2" onclick="Poncon.tagListChecked(event)"><span class="tag">${tag}</span> <span class="ml-1 badge badge-light">${tagList[tag]}</span></div>`
             }
             return html
         } else if (mode == 'edit') {
             for (var tag in tagList) {
-                html += `<div class="btn btn-sm btn-light border mb-3 mr-3" onclick="Poncon.addTagListChecked(event)"><span class="tag">${tag}</span> <span class="ml-1 badge badge-light">${tagList[tag]}</span></div>`
+                html += `<div class="btn btn-sm btn-light border mb-2 mr-2" onclick="Poncon.addTagListChecked(event)"><span class="tag">${tag}</span> <span class="ml-1 badge badge-light">${tagList[tag]}</span></div>`
             }
             return html
         }
         tagList.forEach(tag => {
-            html += `<div class="btn btn-sm btn-secondary mb-3 mr-3">${tag}</div>`
+            html += `<div class="btn btn-sm btn-secondary mb-2 mr-2">${tag}</div>`
         })
         return html
     },
@@ -751,13 +755,14 @@ const Poncon = {
         dataList.forEach((item) => {
             var tagsHtml = ''
             item.tag_list.forEach((tag) => {
-                tagsHtml += `<div class="border border-dark rounded px-2 d-inline-block mr-1 mb-2"># ${tag}</div>`
+                tagsHtml += `<div class="border border-dark rounded px-2 d-inline-block mr-1 mb-2 small">${tag}</div>`
             })
             html += `<div class="${_class}">
                         <div class="card shadow-sm h-100 border-secondary bg-light">
-                            <div class="card-body" data-private="${item.private}">
-                                <h5 class="title mb-2 oyp-limit-line" title="${item.title}" onclick="Poncon.goHref('${item.url}');">${item.title}</h5>
-                                <a class="text-secondary url oyp-limit-line mb-2" href="${item.url}" onclick="Poncon.goHref('${item.url}'); return false;">${item.url}</a>
+                            <div class="card-body px-3 py-2" data-private="${item.private}">
+                                <div class="title mb-1 oyp-limit-line font-weight-bold" title="${item.title}" onclick="Poncon.goHref('${item.url}');">${item.title}</div>
+                                <a class="text-secondary url oyp-limit-line small mb-1" href="${item.url}" onclick="Poncon.goHref('${item.url}'); return false;">${item.url}</a>
+                                <div class="note text-info mb-1">${item.note}</div>
                                 <div class="tags" data-tags="${encodeURIComponent(JSON.stringify(item.tag_list))}">${tagsHtml}</div>
                                 <div class="btns">
                                     <a class="text-danger mr-2" onclick="Poncon.listItemDelete(event, '${item.url}', '${item.update_time}')">删除</a>
@@ -779,6 +784,7 @@ const Poncon = {
         var ele = $(event.target).parents('.card-body')
         var title = ele.find('.title').text()
         var url = ele.find('.url').text()
+        var note = ele.find('.note').text()
         var tags = JSON.parse(decodeURIComponent(ele.find('.tags').attr('data-tags')))
         this.tagList = tags
         this.tagList = this.unique(this.tagList)
@@ -793,6 +799,7 @@ const Poncon = {
         modal.find('.tagList').html(this.makeTags(this.tagList))
         this.giveClick('.tagList')
         modal.find('.input-title').val(title)
+        modal.find('.input-note').val(note)
         modal.find('.input-url').val(url).attr('readonly', 'readonly')
         modal.find('.getHost').attr('disabled', 'disabled')
         modal.find('#customSwitch_private')[0].checked = private == '1' ? true : false

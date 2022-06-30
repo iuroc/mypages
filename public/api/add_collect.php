@@ -18,6 +18,7 @@ $tags = $poncon->POST('tags', null, true); // JSON数组[...]
 $title = $poncon->POST('title', null, true);
 $url = $poncon->POST('url', null, true);
 $private = $poncon->POST('private', 0, true); // 0:公开 1:私密
+$note = $poncon->POST('note', null, true); // 备注
 $update_time = time();
 $mode = $poncon->POST('mode', 'add', true); // add:新增 update:更新
 
@@ -42,10 +43,10 @@ if (mysqli_num_rows($result) > 0 && $mode == 'add') {
 }
 if ($mode == 'add') {
     // 增加收藏
-    $sql = "INSERT INTO `$table` (`username`, `tag_list`, `update_time`, `title`, `url`, `private`) VALUES ('$username', '$tags', $update_time, '$title', '$url', $private);";
+    $sql = "INSERT INTO `$table` (`username`, `tag_list`, `update_time`, `title`, `url`, `private`, `note`) VALUES ('$username', '$tags', $update_time, '$title', '$url', $private, '$note');";
 } else if ($mode == 'update') {
     // 更新
-    $sql = "UPDATE `$table` SET `tag_list` = '$tags', `title` = '$title', `url` = '$url', `private` = '$private', `update_time` = '$update_time' WHERE `url` = '$url' LIMIT 1;";
+    $sql = "UPDATE `$table` SET `tag_list` = '$tags', `title` = '$title', `url` = '$url', `private` = '$private', `update_time` = '$update_time', `note` = '$note' WHERE `url` = '$url' LIMIT 1;";
 }
 
 $result = mysqli_query($conn, $sql);

@@ -166,6 +166,7 @@ class Poncon
             `url` TEXT NOT NULL, -- 网址
             `update_time` int(11) NOT NULL, -- 更新时间
             `tag_list` TEXT NOT NULL, -- 标签列表，以逗号分隔
+            `note` TEXT NOT NULL, -- 备注
             `private` int(11) NOT NULL, -- 0:公开 1:私密
             PRIMARY KEY (`id`) -- 主键
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
