@@ -629,7 +629,7 @@ const Poncon = {
                 username: this.getStorage('username'),
                 password: this.getStorage('password'),
                 page: page,
-                pageSize: 15
+                pageSize: 36
             },
             contentType: 'application/x-www-form-urlencoded',
             dataType: 'json',
@@ -723,7 +723,7 @@ const Poncon = {
                 username: this.getStorage('username'),
                 password: this.getStorage('password'),
                 page: page,
-                pageSize: 15
+                pageSize: 36
             },
             contentType: 'application/x-www-form-urlencoded',
             dataType: 'json',
@@ -887,7 +887,7 @@ const Poncon = {
                 password: this.getStorage('password'),
                 keyword: keyword,
                 page: page,
-                pageSize: 15
+                pageSize: 36
             },
             contentType: 'application/x-www-form-urlencoded',
             dataType: 'json',
