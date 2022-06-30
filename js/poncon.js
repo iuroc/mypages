@@ -379,6 +379,7 @@ const Poncon = {
                 target.removeArray(target.tagList, tagName)
                 modal.find('.tagList').html(target.makeTags(target.tagList))
                 target.giveClick('.tagList')
+                modal.find('.input-tagName').focus()
             })
         }
     },
