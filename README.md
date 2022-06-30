@@ -13,6 +13,12 @@
 - 将 `config.php` 中的数据库账号密码填写完整
 - 运行 `index.html` 即可
 
+## 示意图
+
+![手机网页端](https://raw.githubusercontent.com/oyps/mypages/main/img/at_phone.jpg)
+
+![电脑网页端](https://raw.githubusercontent.com/oyps/mypages/main/img/at_computer.jpg)
+
 ## 功能
 
 - 用户登陆注册
