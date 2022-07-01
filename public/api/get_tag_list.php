@@ -22,7 +22,7 @@ if (!$username || !$password) {
 
 $poncon->login($conn, $username, $password);
 
-$sql = "SELECT `tag_list` FROM `{$config['table']['collect']}` WHERE `username` = '$username';";
+$sql = "SELECT `tag_list` FROM `{$config['table']['collect']}` WHERE `username` = '$username' ORDER BY `update_time` DESC;";
 
 $result = mysqli_query($conn, $sql);
 
