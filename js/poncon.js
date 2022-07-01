@@ -200,8 +200,10 @@ const Poncon = {
             if (mode == 'add') {
                 $('.modal-addCollect .input-url').focus()
                 modal.find('.addCollect').html('添加收藏')
+                modal.find('.addCollect').html('添加收藏')
             } else {
                 modal.find('.addCollect').html('确定编辑')
+                modal.find('.modal-title').html('编辑收藏')
             }
         } else if (modalName == 'searchCollect') {
             // 搜索收藏

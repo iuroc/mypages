@@ -58,6 +58,12 @@
 
 ## 示意图
 
-![手机网页端](https://raw.githubusercontent.com/oyps/mypages/main/img/at_phone.jpg)
+![电脑网页端 - 首页](img/uTools_1656678414889.png)
 
-![电脑网页端](https://raw.githubusercontent.com/oyps/mypages/main/img/at_computer.jpg)
+![电脑网页端 - 编辑收藏](img/uTools_1656678450484.png)
+
+![电脑网页端 - 搜索列表](img/uTools_1656678465902.png)
+
+![电脑网页端 - 标签列表](img/uTools_1656678546233.png)
+
+![电脑网页端 - 分享页面](img/uTools_1656678565171.png)
