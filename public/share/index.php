@@ -15,7 +15,7 @@ $conn = $poncon->initDb();
 
 $config = $poncon->getConfig();
 
-$table = $config['table']['collect'];
+
 
 $username = $poncon->GET('u', null, true);
 $keyword = $poncon->GET('s', null, true);
@@ -23,6 +23,16 @@ $keyword = $poncon->GET('s', null, true);
 if (!$username) {
     die('用户名不能为空');
 }
+
+//  判断用户名是否存在
+$table = $config['table']['user'];
+$sql = "SELECT * FROM $table WHERE username = '$username'";
+$result = mysqli_query($conn, $sql);
+if (mysqli_num_rows($result) == 0) {
+    die('用户名不存在');
+}
+
+$table = $config['table']['collect'];
 $sql = "SELECT * FROM $table WHERE username = '$username' AND `private` = 0 AND (`title` LIKE '%$keyword%' OR `url` LIKE '%$keyword%' OR `tag_list` LIKE '%$keyword%' OR `note` LIKE '%$keyword%') ORDER BY `update_time` DESC;";
 $result = mysqli_query($conn, $sql);
 
@@ -68,6 +78,7 @@ $result = mysqli_query($conn, $sql);
                 <div class=\"card px-3 py-2 h-100 d-flex flex-column justify-content-center shadow-sm\">
                     <div class=\"mb-1 font-weight-bold\" onclick=\"location.href='{$row['url']}'\">{$row['title']}</div>
                     <a class=\"mb-1 small text-muted\" target=\"_blank\" href=\"{$row['url']}\">{$row['url']}</a>
+                    <div class=\"mb-1 text-info\">{$row['note']}</div>
                     <div>{$tagsHtml}</div>
                 </div>
             </div>";
