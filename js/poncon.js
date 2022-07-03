@@ -580,8 +580,7 @@ const Poncon = {
                 if (data.code == 200) {
                     var tags = data.data
                     tags.forEach(tag => {
-                        console.log(tag)
-                        target.addTag(tag)
+                        tag.length > 1 ? target.addTag(tag) : null
                     })
                 }
             }
