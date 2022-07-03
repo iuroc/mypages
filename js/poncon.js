@@ -535,10 +535,12 @@ const Poncon = {
         if (ele.hasClass('btn-light')) {
             ele.removeClass('btn-light')
             ele.addClass('btn-primary')
+            ele.removeClass('bg-warning')
             this.data.tagListObjSelected[tagName] = this.data.tagListObj[tagName]
         } else {
             ele.removeClass('btn-primary')
             ele.addClass('btn-light')
+            this.indexTags()
             delete this.data.tagListObjSelected[tagName]
         }
         if (Object.keys(this.data.tagListObjSelected).length
@@ -575,6 +577,23 @@ const Poncon = {
         }
         this.backToTagList()
     },
+    /**
+     * 索引标签
+     */
+    indexTags() {
+        var modal = $('.modal-tagList')
+        var keyword = $.trim(modal.find('.input-keyword').val())
+        var eles = modal.find('.tagList .btn')
+        for (var i = 0; i < eles.length; i++) {
+            if (eles[i].innerText.search(keyword) != -1 && keyword) {
+                $(eles[i]).addClass('bg-warning')
+            } else {
+                $(eles[i]).removeClass('bg-warning')
+            }
+        }
+    },
+
+
     /**
      * 全选标签
      */
