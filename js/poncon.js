@@ -6,11 +6,7 @@ const Poncon = {
     loginStatus: 0, // 登录状态 0:未登录 1: 已登录
     tagList: [], // 标签列表
     pageLoad: {}, // 页面加载状态
-    setting() { // 网页设置
-        return {
-            newWindowOpen: !this.getStorage('newWindowOpen'), // 当前页打开
-        }
-    },
+    setting: {},
     data: { // 网页数据
         listType: 'load', // 列表类型 load 正常加载 search 搜索
         tagListObjSelected: {}, // 当前选中的标签
@@ -232,10 +228,12 @@ const Poncon = {
     loadSetting() {
         var modal = $('.modal-userSetting')
         var target = this
-        $('#customSwitch_newWindow')[0].checked = this.setting().newWindowOpen
+        $('#customSwitch_newWindow')[0].checked = this.setting.newWindowOpen
+        console.log(this.setting.newWindowOpen)
         $('#customSwitch_newWindow').unbind().on('change', function () {
             var newWindowOpen = !$('#customSwitch_newWindow')[0].checked
             target.setStorage('newWindowOpen', newWindowOpen)
+            target.setting.newWindowOpen = newWindowOpen
         })
         var shareUrl = window.location.origin + window.location.pathname.replace('index.html', '') + 'share/?u=' + this.getStorage('username')
         modal.find('.input-shareUrl').val(shareUrl)
@@ -695,7 +693,7 @@ const Poncon = {
                 if (data.code == 200) {
                     var collectList = data.data
                     if (collectList.length == 0) {
-                        target.setting().isBottom_byTag = 1
+                        target.setting.isBottom_byTag = 1
                         return
                     }
                     var html = target.makeList(collectList, 'byTag')
@@ -704,10 +702,10 @@ const Poncon = {
                         container: modal[0]
                     })
                     target.data.nowPage_byTag = page
-                    target.setting().isBottom_byTag = 0
+                    target.setting.isBottom_byTag = 0
                     return
                 }
-                target.setting().isBottom_byTag = 1
+                target.setting.isBottom_byTag = 1
                 alert(data.msg)
             }
         })
@@ -791,7 +789,7 @@ const Poncon = {
             success: function (data) {
                 if (data.code == 200) {
                     if (data.data.length == 0) {
-                        target.setting().isBottom = 1
+                        target.setting.isBottom = 1
                         return
                     }
 
@@ -799,10 +797,10 @@ const Poncon = {
                     _page.find('.collectList').append(html)
                     new ClipboardJS('.copybtn')
                     target.data.nowPage = page
-                    target.setting().isBottom = 0
+                    target.setting.isBottom = 0
                     return
                 }
-                target.setting().isBottom = 1
+                target.setting.isBottom = 1
                 // alert(data.msg)
             }
         })
@@ -900,7 +898,7 @@ const Poncon = {
      * @param {url} url 网址
      */
     goHref(url) {
-        if (this.setting().newWindowOpen) {
+        if (this.setting.newWindowOpen) {
             window.open(url)
             return
         }
@@ -956,7 +954,7 @@ const Poncon = {
             success: function (data) {
                 if (data.code == 200) {
                     if (data.data.length == 0) {
-                        target.setting().isBottom_search = 1
+                        target.setting.isBottom_search = 1
                         return
                     }
                     var html = target.makeList(data.data, 'search')
@@ -966,10 +964,10 @@ const Poncon = {
                     })
                     target.data.nowPage_search = page
                     target.data.keyword = keyword
-                    target.setting().isBottom_search = 0
+                    target.setting.isBottom_search = 0
                     return
                 }
-                this.setting().isBottom_search = 1
+                this.setting.isBottom_search = 1
                 alert(data.msg)
             }
         })

@@ -8,7 +8,8 @@ $(document).ready(function () {
     // 加载路由
     router(location.hash)
 
-
+    // 加载设置
+    Poncon.setting.newWindowOpen = !Poncon.getStorage('newWindowOpen')
 
     /**
      * 响应路由控制
