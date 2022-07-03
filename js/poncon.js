@@ -311,11 +311,12 @@ const Poncon = {
     },
     /**
      * 新增标签
+     * @param {string} tagName 标签名 如果为空则读取input
      */
-    addTag() {
+    addTag(tagName) {
         var target = this
         var modal = $('.modal-addCollect')
-        var tagName = modal.find('.input-tagName').val()
+        var tagName = tagName ? tagName : modal.find('.input-tagName').val()
         tagName = $.trim(tagName)
         if (!tagName) {
             return
@@ -367,6 +368,7 @@ const Poncon = {
             success: function (data) {
                 modal.find('button.getWebTitle').html('获取').removeAttr('disabled')
                 modal.find('.input-title').val(data.data)
+                target.fenci()
             }
         })
     },
@@ -526,6 +528,10 @@ const Poncon = {
         this.giveClick('.tagList')
         modal.find('.input-tagName').val('').focus()
     },
+    /**
+     * 新增或编辑收藏时标签的单击事件
+     * @param {event} event 事件对象
+     */
     tagListChecked(event) {
         var ele = $(event.target)
         if (!ele.hasClass('btn')) {
@@ -555,6 +561,31 @@ const Poncon = {
             modal.find('.allSelectTag').show()
         }
         this.disabledButton()
+    },
+    /**
+     * 中文分词
+     */
+    fenci() {
+        var target = this
+        var modal = $('.modal-addCollect')
+        var title = modal.find('.input-title').val()
+        var note = modal.find('.input-note').val()
+        $.ajax({
+            url: this.baseUrl + 'api/fenci.php',
+            type: 'GET',
+            data: {
+                text: title + ' ' + note
+            },
+            success: (data) => {
+                if (data.code == 200) {
+                    var tags = data.data
+                    tags.forEach(tag => {
+                        console.log(tag)
+                        target.addTag(tag)
+                    })
+                }
+            }
+        })
     },
     /**
      * 筛选标签
