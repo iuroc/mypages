@@ -15,17 +15,15 @@
     <script src="https://cdn.staticfile.org/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.staticfile.org/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
-    <link rel="stylesheet" href="css/index.css">
-    <script src="js/poncon.js"></script>
-    <script src="js/index.js"></script>
+    <link rel="stylesheet" href="css/index.css?<?php echo time(); ?>">
+    <script src="js/poncon.js?<?php echo time(); ?>"></script>
+    <script src="js/index.js?<?php echo time(); ?>"></script>
 </head>
 
 <body class="fade user-select-none">
     <div class="container my-4 my-sm-5">
         <div class="head d-flex align-items-center mb-4">
-            <img src="img/chevron-left-solid.svg" alt="返回上一页" draggable="false"
-                class="btn-back-oyp cursor-pointer mr-3 mt-1" style="height: 30px; display: none;"
-                onclick="history.back()">
+            <img src="img/chevron-left-solid.svg" alt="返回上一页" draggable="false" class="btn-back-oyp cursor-pointer mr-3 mt-1" style="height: 30px; display: none;" onclick="history.back()">
             <h2 class="webTitle mb-0 mr-auto"></h2>
             <div class="float-right userCenter">
                 <button class="btn btn-outline-danger" onclick="Poncon.showModal('userSetting')">个人中心</button>
@@ -36,8 +34,7 @@
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <div class="input-group searchBox">
-                        <input type="text" class="border-dark form-control input-keyword bg-white" placeholder="请输入关键词"
-                            onclick="Poncon.showModal('searchCollect')" readonly="readonly">
+                        <input type="text" class="border-dark form-control input-keyword bg-white" placeholder="请输入关键词" onclick="Poncon.showModal('searchCollect')" readonly="readonly">
                         <div class="input-group-append">
                             <button class="btn btn-dark" onclick="Poncon.showModal('searchCollect')">搜索</button>
                         </div>
@@ -46,12 +43,10 @@
                 <div class="col-md-6 mb-4">
                     <div class="row">
                         <div class="col-6">
-                            <button class="btn btn-block btn-primary"
-                                onclick="Poncon.showModal('addCollect', 'add')">添加收藏</button>
+                            <button class="btn btn-block btn-primary" onclick="Poncon.showModal('addCollect', 'add')">添加收藏</button>
                         </div>
                         <div class="col-6">
-                            <button class="btn btn-block btn-success"
-                                onclick="Poncon.showModal('tagList')">标签列表</button>
+                            <button class="btn btn-block btn-success" onclick="Poncon.showModal('tagList')">标签列表</button>
                         </div>
                     </div>
                 </div>
@@ -74,24 +69,20 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">账号</span>
                                         </div>
-                                        <input type="text" class="form-control input-username"
-                                            placeholder="请输入用户名 4-20位">
+                                        <input type="text" class="form-control input-username" placeholder="请输入用户名 4-20位">
                                     </div>
                                     <div class="input-group mb-4">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">密码</span>
                                         </div>
-                                        <input type="password" class="form-control input-password"
-                                            placeholder="请输入密码 8-20位" autocomplete="new-password">
+                                        <input type="password" class="form-control input-password" placeholder="请输入密码 8-20位" autocomplete="new-password">
                                     </div>
                                     <div class="row mb-4">
                                         <div class="col">
-                                            <button class="btn btn-block btn-primary"
-                                                onclick="Poncon.clickLogin()">登陆</button>
+                                            <button class="btn btn-block btn-primary" onclick="Poncon.clickLogin()">登陆</button>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-block btn-outline-secondary"
-                                                onclick="history.back();">返回</button>
+                                            <button class="btn btn-block btn-outline-secondary" onclick="history.back();">返回</button>
                                         </div>
                                     </div>
                                     <div class="text-center">
@@ -105,31 +96,26 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">账号</span>
                                         </div>
-                                        <input type="text" class="form-control input-username"
-                                            placeholder="请输入用户名 4-20位">
+                                        <input type="text" class="form-control input-username" placeholder="请输入用户名 4-20位">
                                     </div>
                                     <div class="input-group mb-4">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">密码</span>
                                         </div>
-                                        <input type="password" class="form-control input-password"
-                                            placeholder="请输入密码 8-20位" autocomplete="new-password">
+                                        <input type="password" class="form-control input-password" placeholder="请输入密码 8-20位" autocomplete="new-password">
                                     </div>
                                     <div class="input-group mb-4">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">重复</span>
                                         </div>
-                                        <input type="password" class="form-control input-password2"
-                                            placeholder="请重复输入密码" autocomplete="new-password">
+                                        <input type="password" class="form-control input-password2" placeholder="请重复输入密码" autocomplete="new-password">
                                     </div>
                                     <div class="row mb-4">
                                         <div class="col">
-                                            <button class="btn btn-block btn-primary"
-                                                onclick="Poncon.clickRegister()">注册</button>
+                                            <button class="btn btn-block btn-primary" onclick="Poncon.clickRegister()">注册</button>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-block btn-outline-secondary"
-                                                onclick="history.back();">返回</button>
+                                            <button class="btn btn-block btn-outline-secondary" onclick="history.back();">返回</button>
                                         </div>
                                     </div>
                                     <div class="text-center">
@@ -164,8 +150,7 @@
                 </div>
                 <div class="position-absolute modal-body bg-white" style="width: 100%; margin-top: 50px;">
                     <div class="input-group">
-                        <input type="text" class="form-control input-keyword" placeholder="百度一下 或者 #软件"
-                            onkeyup="Poncon.inputKeyup(event, 'clickSearch')">
+                        <input type="text" class="form-control input-keyword" placeholder="百度一下 或者 #软件" onkeyup="Poncon.inputKeyup(event, 'clickSearch')">
                         <div class="input-group-append">
                             <button class="btn btn-dark" onclick="Poncon.clickSearch()">搜索</button>
                         </div>
@@ -191,18 +176,14 @@
                 </div>
                 <div class="position-absolute modal-body bg-white" style="width: 100%; margin-top: 50px;">
                     <div class="input-group">
-                        <input type="text" class="form-control input-keyword" placeholder="查找标签"
-                            onkeyup="Poncon.indexTags()">
+                        <input type="text" class="form-control input-keyword" placeholder="查找标签" onkeyup="Poncon.indexTags()">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-info allSelectTag" onclick="Poncon.allSelectTag()">全选</button>
-                    <button class="btn btn-light allUnSelectTag" onclick="Poncon.allUnSelectTag()"
-                        style="display: none;">全不选</button>
-                    <button class="btn btn-success submitSelect" disabled="disabled"
-                        onclick="Poncon.loadCollectListByTag(Poncon.data.tagListObjSelected, 0)">加载列表</button>
-                    <button class="btn btn-secondary backToList" style="display: none;"
-                        onclick="Poncon.backToTagList()">返回标签列表</button>
+                    <button class="btn btn-light allUnSelectTag" onclick="Poncon.allUnSelectTag()" style="display: none;">全不选</button>
+                    <button class="btn btn-success submitSelect" disabled="disabled" onclick="Poncon.loadCollectListByTag(Poncon.data.tagListObjSelected, 0)">加载列表</button>
+                    <button class="btn btn-secondary backToList" style="display: none;" onclick="Poncon.backToTagList()">返回标签列表</button>
                 </div>
             </div>
         </div>
@@ -223,23 +204,19 @@
                         <div class="input-group-prepend d-none d-sm-block">
                             <span class="input-group-text">网页URL</span>
                         </div>
-                        <input type="text" class="form-control input-url" placeholder="请输入网页URL"
-                            onkeyup="Poncon.inputKeyup(event, 'getHostFromUrl')">
+                        <input type="text" class="form-control input-url" placeholder="请输入网页URL" onkeyup="Poncon.inputKeyup(event, 'getHostFromUrl')">
                         <div class="input-group-append">
-                            <button class="btn btn-secondary getHost" onclick="Poncon.getHostFromUrl()"
-                                tabindex="-1">取HOST</button>
+                            <button class="btn btn-secondary getHost" onclick="Poncon.getHostFromUrl()" tabindex="-1">取HOST</button>
                         </div>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend d-none d-sm-block">
                             <span class="input-group-text">网页标题</span>
                         </div>
-                        <input type="text" class="form-control input-title" placeholder="请输入网页标题"
-                            onkeyup="Poncon.inputKeyup(event, 'getWebTitle')">
+                        <input type="text" class="form-control input-title" placeholder="请输入网页标题" onkeyup="Poncon.inputKeyup(event, 'getWebTitle')">
                         <div class="input-group-append">
                             <button class="fenci btn btn-info" onclick="Poncon.fenci()">分词</button>
-                            <button class="btn btn-secondary getWebTitle" onclick="Poncon.getWebTitle()"
-                                tabindex="-1">获取</button>
+                            <button class="btn btn-secondary getWebTitle" onclick="Poncon.getWebTitle()" tabindex="-1">获取</button>
                         </div>
                     </div>
                     <div class="input-group mb-3">
@@ -249,16 +226,14 @@
                     <div class="row">
                         <div class="col-md-8 mb-3 pr-md-0">
                             <div class="input-group">
-                                <input type="text" class="form-control input-tagName" placeholder="标签名"
-                                    onkeyup="Poncon.inputKeyup(event, 'addTag')">
+                                <input type="text" class="form-control input-tagName" placeholder="标签名" onkeyup="Poncon.inputKeyup(event, 'addTag')">
                                 <div class="input-group-append">
                                     <button class="btn btn-danger" onclick="Poncon.addTag()" tabindex="-1">加标签</button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <button class="btn btn-primary btn-block addCollect"
-                                onclick="Poncon.addCollect()">添加收藏</button>
+                            <button class="btn btn-primary btn-block addCollect" onclick="Poncon.addCollect()">添加收藏</button>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -299,8 +274,7 @@
                         </div>
                         <input type="text" class="form-control input-shareUrl bg-white" id="input-shareUrl" readonly>
                         <div class="input-group-append">
-                            <button class="btn btn-secondary copybtn"
-                                data-clipboard-target="#input-shareUrl">复制</button>
+                            <button class="btn btn-secondary copybtn" data-clipboard-target="#input-shareUrl">复制</button>
                         </div>
                     </div>
                     <div class="text-muted font-weight-bold mb-3">设置</div>
@@ -310,8 +284,7 @@
                         </div>
                         <div class="form-control">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="customSwitch_newWindow"
-                                    checked="checked">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch_newWindow" checked="checked">
                                 <label class="custom-control-label" for="customSwitch_newWindow">开启</label>
                             </div>
                         </div>
