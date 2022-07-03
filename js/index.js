@@ -118,6 +118,4 @@ $(document).ready(function () {
             Poncon.loadCollectListByTag(Poncon.data.tagListObjSelected, Poncon.data.nowPage_byTag + 1)
         }
     })
-
-
 })

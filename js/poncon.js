@@ -665,6 +665,9 @@ const Poncon = {
      * @param {object} tags 标签名
      */
     loadCollectListByTag(tags, page) {
+        if (isNaN(page)) {
+            return
+        }
         var modal = $('.modal-tagList')
         if (page == 0) {
             modal.find('.tagList').hide()
@@ -673,6 +676,7 @@ const Poncon = {
             modal.find('.submitSelect').hide()
             modal.find('.backToList').show()
         }
+
         tags = JSON.stringify(Object.keys(tags))
         var target = this
         $.ajax({
