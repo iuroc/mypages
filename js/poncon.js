@@ -368,7 +368,7 @@ const Poncon = {
             success: function (data) {
                 modal.find('button.getWebTitle').html('获取').removeAttr('disabled')
                 modal.find('.input-title').val(data.data)
-                target.fenci()
+                data.data ? target.fenci() : null
             }
         })
     },
