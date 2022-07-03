@@ -229,10 +229,9 @@ const Poncon = {
         var modal = $('.modal-userSetting')
         var target = this
         $('#customSwitch_newWindow')[0].checked = this.setting.newWindowOpen
-        console.log(this.setting.newWindowOpen)
         $('#customSwitch_newWindow').unbind().on('change', function () {
-            var newWindowOpen = !$('#customSwitch_newWindow')[0].checked
-            target.setStorage('newWindowOpen', newWindowOpen)
+            var newWindowOpen = $('#customSwitch_newWindow')[0].checked
+            target.setStorage('newWindowOpen', !newWindowOpen)
             target.setting.newWindowOpen = newWindowOpen
         })
         var shareUrl = window.location.origin + window.location.pathname.replace('index.html', '') + 'share/?u=' + this.getStorage('username')
