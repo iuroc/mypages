@@ -612,7 +612,7 @@ const Poncon = {
         var keyword = $.trim(modal.find('.input-keyword').val())
         var eles = modal.find('.tagList .btn')
         for (var i = 0; i < eles.length; i++) {
-            if (eles[i].innerText.search(keyword) != -1 && keyword) {
+            if (eles[i].innerText.search(keyword) != -1 && keyword && !$(eles[i]).hasClass('btn-primary')) {
                 $(eles[i]).addClass('bg-warning')
             } else {
                 $(eles[i]).removeClass('bg-warning')
