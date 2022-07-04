@@ -571,7 +571,7 @@ const Poncon = {
             url: this.baseUrl + 'api/fenci.php',
             type: 'GET',
             data: {
-                text: title + ' ' + note
+                text: title + '，' + note
             },
             success: (data) => {
                 if (data.code == 200) {
