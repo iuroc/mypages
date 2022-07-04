@@ -404,7 +404,7 @@ const Poncon = {
             return
         }
         var tags = JSON.stringify(this.tagList)
-        var private = $('#customSwitch_private')[0].checked ? 1 : 0
+        var _private = $('#customSwitch_private')[0].checked ? 1 : 0
         $.ajax({
             method: 'post',
             url: this.baseUrl + 'api/add_collect.php',
@@ -414,7 +414,7 @@ const Poncon = {
                 url: url,
                 title: title,
                 tags: tags,
-                private: private,
+                private: _private,
                 mode: this.editMode,
                 note: note
             },
@@ -847,7 +847,7 @@ const Poncon = {
         var tags = JSON.parse(decodeURIComponent(ele.find('.tags').attr('data-tags')))
         this.tagList = tags
         this.tagList = this.unique(this.tagList)
-        var private = ele.attr('data-private')
+        var _private = ele.attr('data-private')
         this.showModal('addCollect', 'update', mode)
         if (mode == 'search') {
             $('.modal-searchCollect').modal('hide')
@@ -861,7 +861,7 @@ const Poncon = {
         modal.find('.input-note').val(note)
         modal.find('.input-url').val(url).attr('readonly', 'readonly')
         modal.find('.getHost').attr('disabled', 'disabled')
-        modal.find('#customSwitch_private')[0].checked = private == '1' ? true : false
+        modal.find('#customSwitch_private')[0].checked = _private == '1' ? true : false
         this.editMode = 'update'
         this.editingNode = $(event.target).parents('.mb-4') // 正在编辑的节点
     },
