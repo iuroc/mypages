@@ -16,7 +16,8 @@ if (!$url) {
 
 $ym = file_get_contents($url);
 
-$title = $poncon->sj($ym, '<title>', '</title>');
+$title = $poncon->sj($ym, '<title', '</title>');
+$title = $poncon->sj($title, '>', null);
 // 去除实体
 $title = html_entity_decode($title);
 
