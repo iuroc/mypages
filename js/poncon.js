@@ -14,7 +14,7 @@ const Poncon = {
         tagListObjTemp: {}, // 筛选后的标签列表
     },
     /**
-     * 用户登陆
+     * 用户登录
      * @param {string} username 用户名
      * @param {string} password 密文密码
      * @returns {boolean} 是否验证成功

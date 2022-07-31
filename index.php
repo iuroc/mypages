@@ -79,7 +79,7 @@
                                     </div>
                                     <div class="row mb-4">
                                         <div class="col">
-                                            <button class="btn btn-block btn-primary" onclick="Poncon.clickLogin()">登陆</button>
+                                            <button class="btn btn-block btn-primary" onclick="Poncon.clickLogin()">登录</button>
                                         </div>
                                         <div class="col">
                                             <button class="btn btn-block btn-outline-secondary" onclick="history.back();">返回</button>
