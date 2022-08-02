@@ -16,9 +16,7 @@ $input = json_decode('{
       "method": "GET",
       "header": "Content-type: application/x-www-form-urlencoded\n",
       "content": "",
-      "timeout": 900,
-      "proxy": "tcp://localhost:7890",
-      "request_fulluri": true
+      "timeout": 900
     },
     "ssl": {
       "verify_peer": false,
