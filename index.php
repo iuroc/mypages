@@ -18,6 +18,15 @@
     <link rel="stylesheet" href="css/index.css?<?php echo time(); ?>">
     <script src="js/poncon.js?<?php echo time(); ?>"></script>
     <script src="js/index.js?<?php echo time(); ?>"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?021379b43b1e674fe96330ead7d4ee77";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 </head>
 
 <body class="fade user-select-none">
