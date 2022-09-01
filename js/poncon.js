@@ -287,10 +287,24 @@ const Poncon = {
         this.data.tagListObj = obj
         this.data.tagListObjTemp = obj
         var modal = $('.modal-tagList')
-        var list = this.sortByKey(obj)
+        var list = this.sortByNum(obj)
         var html = this.makeTags(list, 'all')
         modal.find('.tagList').html(html)
 
+    },
+    /**
+     * 对象值排序
+     * @param {object} obj 对象
+     * @returns {object} 排序后的对象
+     */
+    sortByNum(obj) {
+        var list = {}
+        Object.keys(obj).sort(function (a, b) {
+            return obj[b] - obj[a]
+        }).forEach((key) => {
+            list[key] = obj[key]
+        })
+        return list
     },
     /**
      * 对象按键名的拼音排序
