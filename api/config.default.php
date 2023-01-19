@@ -4,7 +4,7 @@
  * 配置文件
  * 请将数据库账号密码填写完整
  */
-
+error_reporting(0);
 $config = [
     'mysql' => [
         'host' => 'localhost',
